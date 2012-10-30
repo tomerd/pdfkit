@@ -3,6 +3,7 @@ module.exports =
         # The opacity dictionaries
         @_opacityRegistry = {}
         @_opacityCount = 0
+        @_colorState = {}
 
     _normalizeColor: (color) ->
         if typeof color is 'string'
@@ -28,6 +29,8 @@ module.exports =
         return null
 
     fillColor: (color, opacity) ->
+       @_colorState["fillColor"] = { color: color, opacity: opacity }
+       
        color = @_normalizeColor(color)
        return this unless color
        
@@ -37,6 +40,8 @@ module.exports =
        @addContent "#{color} #{op}"
 
     strokeColor: (color, opacity) ->
+       @_colorState["strokeColor"] = { color: color, opacity: opacity }
+       
        color = @_normalizeColor(color)
        return this unless color
 

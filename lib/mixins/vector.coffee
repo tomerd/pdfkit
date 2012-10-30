@@ -10,6 +10,9 @@ module.exports =
     restore: ->
         @addContent 'Q'
         
+    beginPath: ->
+        @addContent 'm'
+        
     closePath: ->
         @addContent 'h'
     
@@ -46,7 +49,7 @@ module.exports =
         @addContent "[#{length} #{space}] #{phase} d"
         
     undash: ->
-        @addContent "[] 0 d"
+        @addContent "[null null] 0 d"
         
     moveTo: (x, y) ->
         y = @page.height - y

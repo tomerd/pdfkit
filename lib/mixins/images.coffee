@@ -50,6 +50,8 @@ module.exports =
                 h = bh
                 w = bh * ip
         
+        if @y + h > @page.maxY then @nextPage()
+
         # Set the current y position to below the image if it is in the document flow            
         @y += h if @y is y
         y = @page.height - y - h

@@ -53,11 +53,11 @@ module.exports =
         
         # newlines    
         else if (matches = text.split '\n').length > 1
-            @_line match, options for match in matches
+            @_wrap match, options for match in matches
         
         # single line    
         else
-            @_line text, options
+            @_wrap text, options
             
         return this
         
@@ -206,6 +206,15 @@ module.exports =
         for word, i in words
             w = wordWidths[word] ?= width(word)
             
+            # if we've reached the maximum height, make sure
+            # that the first line of a paragraph is never by 
+            # itself at the bottom of a page
+            nextY = @y + @currentLineHeight(true)
+            if @y > wrap.maxY or (wrap.lastLine and nextY > wrap.maxY)
+                # if we've reached the edge of the page, 
+                # continue on a new page or column
+                @_nextSection options
+
             if w > spaceLeft or word is '\n'
                 # keep track of the wrapping state
                 if wrap.lastLine
@@ -224,14 +233,7 @@ module.exports =
                 # we're no longer on the first line...
                 wrap.firstLine = false
                 
-                # if we've reached the maximum height, make sure
-                # that the first line of a paragraph is never by 
-                # itself at the bottom of a page
-                nextY = @y + @currentLineHeight(true)
-                if @y > wrap.maxY or (wrap.lastLine and nextY > wrap.maxY)
-                    # if we've reached the edge of the page, 
-                    # continue on a new page or column
-                    @_nextSection options
+
                 
                 # reset the space left and buffer
                 spaceLeft = lineWidth - w - wrap.extraSpace
@@ -253,7 +255,9 @@ module.exports =
         wrap = @_wrapState
         
         if ++wrap.column > options.columns
-            @addPage()
+            #@addPage()
+            @nextPage()
+            
             wrap.column = 1
             wrap.startY = @page.margins.top
             wrap.maxY = @page.maxY()

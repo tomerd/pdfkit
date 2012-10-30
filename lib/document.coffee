@@ -58,7 +58,7 @@ class PDFDocument
     mixin 'text'
     mixin 'images'
     mixin 'annotations'
-        
+    
     addPage: (options = @options) ->
         # create a page object
         @page = new PDFPage(this, options)
@@ -72,7 +72,21 @@ class PDFDocument
         @y = @page.margins.top
         
         return this
+    
+    nextPage: (options = @options) ->
+        pageIndex = @pages.indexOf(@page)
+        if pageIndex == @pages.length-1
+            @addPage(options)
         
+        else
+            @page = @pages[pageIndex+1]
+            # reset x and y coordinates
+            @x = @page.margins.left
+            @y = @page.margins.top
+        
+        if @_colorState["fillColor"] then @fillColor(@_colorState["fillColor"].color, @_colorState["fillColor"].opacity)
+        if @_colorState["strokeColor"] then @strokeColor(@_colorState["strokeColor"].color, @_colorState["strokeColor"].opacity)
+    
     ref: (data) ->
         @store.ref(data)
         
