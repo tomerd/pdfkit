@@ -83,6 +83,9 @@ module.exports =
         @fill()
             
     _line: (text, options) ->
+        text = '' + text
+        return if text.trim().length is 0
+        
         wrap = @_wrapState
         paragraphGap = (wrap.firstLine and @y isnt wrap.startY and options.paragraphGap) or 0
         lineGap = options.lineGap or @_lineGap or 0
@@ -92,7 +95,7 @@ module.exports =
             
     _fragment: (text, x, y, options = {}) ->
         text = '' + text
-        return if text.length is 0
+        return if text.trim().length is 0
         
         state = @_textState
         wrap = @_wrapState
@@ -173,6 +176,9 @@ module.exports =
         state.wordSpacing = wordSpacing
 
     _wrap: (text, options) ->
+        text = '' + text
+        return if text.trim().length is 0
+        
         wrap = @_wrapState
         width = @widthOfString.bind this
         indent = options.indent or 0
@@ -190,6 +196,7 @@ module.exports =
         
         # split the line into words
         words = text.match(WORD_RE)
+        return if !words
         
         # calculate the extra width
         wrap.extraSpace = (options.wordSpacing or 0) * (words.length - 1) +   # wordSpacing
