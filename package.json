@@ -26,7 +26,8 @@
   },
   "scripts": {
       "prepublish": "coffee -o js -c lib/ && cp -r lib/font/data js/font/data",
-      "postpublish": "rm -rf ./js"
+      "postpublish": "rm -rf ./js",
+      "postinstall" : "coffee -o js -c lib/ && cp -r lib/font/data js/font/data"
   },
   "main": "./js/document",
   "engine": [ "node >= v0.6.0" ]
